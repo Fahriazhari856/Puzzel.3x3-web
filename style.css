@@ -478,7 +478,7 @@
             }
 
             .tracking-table td, .rules-table td {
-                font-size: 9px;
+                font-size: 7px;
                 padding: 4px 2px;
             }
 
@@ -545,3 +545,4 @@
         }
 
     </style>
+
