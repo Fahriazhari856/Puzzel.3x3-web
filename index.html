@@ -1,0 +1,187 @@
+<!doctype html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="initial-scale=1.4">
+	<meta name="description" content="Sliding Puzzle Quiz">
+	<meta name="author" content="Eugene Kardash">
+	<link rel="author" href="http://kardash.net"/>
+	<link rel="me" href="http://kardash.net"/>
+  <link rel="stylesheet" href="style.css">
+
+	<title>Sliding Puzzle Quiz (vanilla javascript)</title>
+</head>
+<body>
+    <figure class="SlidingPuzzleFigure">
+        <div class="header">
+            <h1>SLIDING PUZZLE</h1>
+            <p>Arrange the numbers 1-8 in order. Click tiles adjacent to the empty space to move them.</p>
+        </div>
+
+        <section>
+            <ul class="SlidingPuzzle" id="puzzle">
+                <li class="Tile Tile1" data-value="1">1</li>
+                <li class="Tile Tile2" data-value="2">2</li>
+                <li class="Tile Tile3" data-value="3">3</li>
+                <li class="Tile Tile7" data-value="7">7</li>
+                <li class="Tile Tile4" data-value="4">4</li>
+                <li class="Tile Tile6" data-value="6">6</li>
+                <li class="EmptyTile" data-value="0"></li>
+                <li class="Tile Tile5" data-value="5">5</li>
+                <li class="Tile Tile8" data-value="8">8</li>
+            </ul>
+
+            <div class="success-message" id="successMessage">
+                🎉 Congratulations! You solved the puzzle! 🎉
+            </div>
+
+            <div class="moves">Moves: <span id="movesnum">0</span></div>
+            <button type="button" id="newgame">New Game</button>
+            <button type="button" id="solveit">Solve It!</button>
+
+            <div class="table-container">
+                <div class="tracking-tables">
+                    <div class="tracking-table">
+                        <table id="trackingTable">
+                            <thead>
+                                <tr>
+                                    <th>Initial State</th>
+                                    <th>Goal State</th>
+                                    <th>Rules</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trackingBody">
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="rules-table">
+                        <table id="rulesTable">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Rule</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Tile dapat bergerak ke atas (jika ruang kosong di bawah)</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Tile dapat bergerak ke bawah (jika ruang kosong di atas)</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Tile dapat bergerak ke kiri (jika ruang kosong di kanan)</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>Tile dapat bergerak ke kanan (jika ruang kosong di kiri)</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>Hanya tile bersebelahan yang dapat bergerak</td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>Setiap gerakan menukar posisi tile dengan ruang kosong</td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                    <td>Tujuan: susun angka 1-8 berurutan dengan ruang kosong di akhir</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="solution-section">
+                    <div class="solution-table">
+                        <div class="solution-header">Solusi yang ditemukan:</div>
+                        <table id="solutionTable">
+                            <thead>
+                                <tr>
+                                    <th>State Sebelum</th>
+                                    <th>State Sesudah</th>
+                                    <th>Aturan yg dipakai</th>
+                                </tr>
+                            </thead>
+                            <tbody id="solutionBody">
+                                <tr>
+                                    <td colspan="3" style="text-align: center; padding: 20px; color: #666;">
+                                        Klik "Solve It!" untuk menampilkan solusi optimal
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="assignment-section">
+            <h3>Langkah Pengerjaan</h3>
+            <ol class="assignment-steps">
+                <li>
+                    <span class="step-number">1.</span> Tentukan dan tuliskan initial state puzzle yang Anda dapatkan.
+                    <div class="state-info">
+                        <strong>Initial State:</strong> <span id="initialStateDisplay">(1,2,3,7,4,6,0,5,8)</span><br>
+                        <strong>Visualisasi:</strong><br>
+                        <pre id="initialStateVisual">┌─────┬─────┬─────┐
+│  1  │  2  │  3  │
+├─────┼─────┼─────┤
+│  7  │  4  │  6  │
+├─────┼─────┼─────┤
+│     │  5  │  8  │
+└─────┴─────┴─────┘</pre>
+                    </div>
+                </li>
+                <li>
+                    <span class="step-number">2.</span> Tentukan goal state (susunan akhir yang benar).
+                    <div class="state-info">
+                        <strong>Goal State:</strong> <span id="goalStateDisplay">(1,2,3,4,5,6,7,8,0)</span><br>
+                        <strong>Visualisasi:</strong><br>
+                        <pre id="goalStateVisual">┌─────┬─────┬─────┐
+│  1  │  2  │  3  │
+├─────┼─────┼─────┤
+│  4  │  5  │  6  │
+├─────┼─────┼─────┤
+│  7  │  8  │     │
+└─────┴─────┴─────┘</pre>
+                    </div>
+                </li>
+                <li>
+                    <span class="step-number">3.</span> Identifikasi aturan transisi
+                    <div class="rules-info">
+                        <h4>Aturan Transisi yang Berlaku:</h4>
+                        <ul class="rules-list">
+                            <li><strong>Aturan Dasar:</strong> Hanya tile yang bersebelahan langsung dengan ruang kosong yang dapat dipindahkan</li>
+                            <li><strong>Arah Gerakan:</strong> Atas, Bawah, Kiri, Kanan (tidak diagonal)</li>
+                            <li><strong>Mekanisme:</strong> Menukar posisi tile dengan ruang kosong</li>
+                            <li><strong>Tile yang Dapat Dipindahkan Saat Ini:</strong> <span id="movableTiles">7, 5</span></li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <span class="step-number">4.</span> Tunjukkan urutan langkah (solusi) yang Anda pilih hingga mencapai goal state.
+                    <div class="solution-preview">
+                        <h4>Solusi Optimal (Klik "Solve It!" untuk melihat animasi):</h4>
+                        <div class="solution-steps" id="solutionSteps">
+                            Klik tombol "Solve It!" untuk menampilkan langkah-langkah solusi optimal menggunakan algoritma A* Search
+                        </div>
+                    </div>
+                </li>
+            </ol>
+        </div>
+
+        <figcaption>A Sliding Puzzle Game</figcaption>
+    </figure>
+
+	<script src="script.js"></script>
+
+</body>
+</html>

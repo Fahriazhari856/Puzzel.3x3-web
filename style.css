@@ -1,0 +1,547 @@
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .SlidingPuzzleFigure {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .SlidingPuzzle {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 5px;
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            list-style: none;
+            position: relative;
+        }
+
+        .Tile {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(145deg, #3498db, #2980b9);
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .Tile:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .Tile.movable {
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .EmptyTile {
+            background: transparent !important;
+            box-shadow: none !important;
+            cursor: default !important;
+        }
+
+        .moves {
+            font-size: 18px;
+            margin: 20px 0;
+            font-weight: bold;
+            color: #333;
+        }
+
+        button {
+            background: linear-gradient(145deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            margin: 0 10px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        #solveit {
+            background: linear-gradient(145deg, #f39c12, #e67e22);
+        }
+
+        figcaption {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .success-message {
+            background: linear-gradient(145deg, #2ecc71, #27ae60);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: -40px 0;
+            font-size: 18px;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.5s ease;
+}
+
+        .success-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #333;
+            margin: 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header p {
+            color: #666;
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+
+        .tracking-table {
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .tracking-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .tracking-table th {
+            background: linear-gradient(145deg, #f39c12, #e67e22);
+            color: white;
+            padding: 12px 8px;
+            text-align: center;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .tracking-table td {
+            padding: 8px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .tracking-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .tracking-table tr:hover {
+            background-color: #e3f2fd;
+        }
+
+        .state-display {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .rule-display {
+            font-weight: bold;
+            color: #e74c3c;
+            font-size: 16px;
+        }
+
+        .goal-reached {
+            background: linear-gradient(145deg, #2ecc71, #27ae60) !important;
+            color: white !important;
+        }
+
+        .goal-reached td {
+            color: white !important;
+            font-weight: bold;
+        }
+
+        .table-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .assignment-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+
+        .assignment-section h3 {
+            color: #2c3e50;
+            margin: 0 0 15px 0;
+            font-size: 1.4em;
+        }
+
+        .assignment-steps {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .solution-table {
+  margin: 20px auto;
+  width: 90%;
+  max-width: 800px;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+.solution-header {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+#solutionTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#solutionTable th {
+  background: #f57c00; /* oranye */
+  color: white;
+  padding: 12px;
+  text-align: center;
+}
+
+#solutionTable td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+#solutionTable tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+#solutionTable tr.start {
+  background: #ffe0b2;
+  font-weight: bold;
+}
+
+#solutionTable tr.goal {
+  background: #81c784;
+  color: white;
+  font-weight: bold;
+}
+
+
+        .assignment-steps li {
+            background: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #e74c3c;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .step-number {
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .state-info {
+            background: #ecf0f1;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        .state-info strong {
+            color: #2c3e50;
+        }
+
+        .rules-info {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .rules-info h4 {
+            color: #856404;
+            margin: 0 0 10px 0;
+        }
+
+        .rules-list {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .rules-list li {
+            margin: 5px 0;
+            color: #856404;
+        }
+
+        .solution-preview {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .solution-preview h4 {
+            color: #0c5460;
+            margin: 0 0 10px 0;
+        }
+
+        .solution-steps {
+            font-family: monospace;
+            font-size: 12px;
+            line-height: 1.4;
+            color: #0c5460;
+        }
+
+ /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 10px;
+                align-items: flex-start;
+            }
+
+            .SlidingPuzzleFigure {
+                width: 100%;
+                max-width: 100%;
+                padding: 15px;
+                margin: 10px 0;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .header p {
+                font-size: 1em;
+            }
+
+            .SlidingPuzzle {
+                width: 250px;
+                height: 250px;
+                margin: 15px auto;
+            }
+
+            .Tile {
+                font-size: 20px;
+            }
+
+            .tracking-tables {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .tracking-table, .rules-table {
+                min-width: 100%;
+                max-height: 200px;
+            }
+
+            .solution-table {
+                min-width: 100%;
+                max-height: 250px;
+                padding-top: 51px;
+            }
+
+            .tracking-table th, .rules-table th, .solution-table th {
+                padding: 8px 4px;
+                font-size: 12px;
+            }
+
+            .tracking-table td, .rules-table td {
+                padding: 6px 4px;
+                font-size: 10px;
+            }
+
+            .solution-table td {
+                padding: 8px 4px;
+                font-size: 11px;
+            }
+
+            .rules-table td:last-child {
+                font-size: 11px;
+            }
+
+            .assignment-section {
+                padding: 5px;
+                padding-top: 10px;
+                margin: 105px 0;
+            }
+
+            .assignment-steps li {
+                padding: 12px;
+                margin: 8px 0;
+            }
+
+            .state-info {
+                padding: 8px;
+                font-size: 12px;
+            }
+
+            .state-info pre {
+                font-size: 10px;
+                overflow-x: auto;
+            }
+
+            button {
+                padding: 10px 16px;
+                margin: 5px;
+                font-size: 14px;
+                display: block;
+                width: calc(50% - 10px);
+                margin: 5px auto;
+            }
+
+            .moves {
+                font-size: 16px;
+                margin: 15px 0;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .SlidingPuzzle {
+                width: 200px;
+                height: 200px;
+            }
+
+            .Tile {
+                font-size: 18px;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .solution-table td {
+                font-size: 9px;
+                padding: 6px 2px;
+            }
+
+            .tracking-table td, .rules-table td {
+                font-size: 9px;
+                padding: 4px 2px;
+            }
+
+            .rules-table td:last-child {
+                font-size: 10px;
+                text-align: left;
+            }
+
+            button {
+                width: 90%;
+                margin: 8px auto;
+            }
+
+            .assignment-section h3 {
+                font-size: 1.2em;
+            }
+
+            .state-info pre {
+                font-size: 8px;
+            }
+        }
+
+        /* Landscape orientation for tablets */
+        @media screen and (max-width: 1024px) and (orientation: landscape) {
+            .tracking-tables {
+                flex-direction: row;
+            }
+
+            .tracking-table, .rules-table {
+                min-width: 45%;
+            }
+
+            .solution-table {
+                min-width: 90%;
+            }
+        }
+
+        /* Large screens optimization */
+        @media screen and (min-width: 1200px) {
+            .SlidingPuzzleFigure {
+                max-width: 1000px;
+            }
+
+            .tracking-tables {
+                justify-content: space-between;
+            }
+
+            .tracking-table, .rules-table {
+                max-width: 45%;
+            }
+
+            .solution-table {
+                max-width: 90%;
+            }
+
+            .SlidingPuzzle {
+                width: 350px;
+                height: 350px;
+            }
+
+            .Tile {
+                font-size: 28px;
+            }
+        }
+
+    </style>
